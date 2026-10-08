@@ -1,0 +1,354 @@
+{
+  "users": [
+    {
+      "id": "usr_admin_master",
+      "email": "admin@safepicksarena.com",
+      "username": "ArenaAdmin",
+      "passwordHash": "$2b$10$5l8tsHsh/yPpjgFx47EHIuCJcViodR7aDrJ8.5TQ2HYLvrI379otG",
+      "role": "admin",
+      "isVerified": true,
+      "bio": "Lead Sports Analytics & Arena Administrator",
+      "createdAt": "2026-10-08T17:06:31.039Z"
+    },
+    {
+      "id": "usr_owner_main",
+      "email": "phscspractical@gmail.com",
+      "username": "ArenaDirector",
+      "passwordHash": "$2b$10$5l8tsHsh/yPpjgFx47EHIuCJcViodR7aDrJ8.5TQ2HYLvrI379otG",
+      "role": "admin",
+      "isVerified": true,
+      "bio": "Executive Director · Safe Picks Arena",
+      "createdAt": "2026-10-08T17:06:31.040Z"
+    },
+    {
+      "id": "usr_1791479662860_rfwor",
+      "email": "striker@example.com",
+      "username": "StrikerPro",
+      "passwordHash": "$2b$10$DfBwGjpLh0JF2HjfYGMYNOZa7eGqtM4.Mqk53JxHw7/o3z9XE.a1W",
+      "role": "user",
+      "isVerified": true,
+      "bio": "Sports enthusiast & tactical predictor",
+      "createdAt": "2026-10-08T17:14:22.860Z"
+    }
+  ],
+  "sessions": [
+    {
+      "token": "891fc5c02055dee60e1124dfcb16f58409c7ec09324e7929807c6627dba1b905",
+      "userId": "usr_1791479662860_rfwor",
+      "createdAt": 1791479662860
+    },
+    {
+      "token": "fcbc18cb3b1c2ef3ee046e5d482fc1e5dc3232cb7376457a3f5950c82443a3e7",
+      "userId": "usr_admin_master",
+      "createdAt": 1791479685610
+    }
+  ],
+  "chatMessages": [
+    {
+      "id": "msg_1791479676488_5nfw",
+      "userId": "usr_1791479662860_rfwor",
+      "username": "StrikerPro",
+      "role": "user",
+      "text": "Hello Arena! Ready for the weekend fixtures.",
+      "timestamp": "2026-10-08T17:14:36.488Z"
+    }
+  ],
+  "friendships": [
+    {
+      "id": "frnd_1791479727684_js6a",
+      "requesterId": "usr_1791479662860_rfwor",
+      "recipientId": "usr_admin_master",
+      "status": "pending",
+      "createdAt": "2026-10-08T17:15:27.684Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_1791479662861",
+      "userId": "usr_1791479662860_rfwor",
+      "type": "system",
+      "title": "Welcome to SAFE PICKS ARENA!",
+      "content": "Verification token generated: aabeb1a691b0d2a0e5a734a8737c257c2a9a56be. Click Verify Email in your profile to complete account verification.",
+      "isRead": false,
+      "createdAt": "2026-10-08T17:14:22.861Z"
+    },
+    {
+      "id": "notif_1791479713030_usr_owner_main",
+      "userId": "usr_owner_main",
+      "type": "prediction_published",
+      "title": "New Official Safe Pick Published!",
+      "content": "Admin ArenaAdmin just posted: Inter Milan vs AC Milan - Pick: Over 2.5 Goals (@1.75)",
+      "link": "/predictions/pred_1791479713029_y0v0",
+      "isRead": false,
+      "createdAt": "2026-10-08T17:15:13.030Z"
+    },
+    {
+      "id": "notif_1791479713031_usr_1791479662860_rfwor",
+      "userId": "usr_1791479662860_rfwor",
+      "type": "prediction_published",
+      "title": "New Official Safe Pick Published!",
+      "content": "Admin ArenaAdmin just posted: Inter Milan vs AC Milan - Pick: Over 2.5 Goals (@1.75)",
+      "link": "/predictions/pred_1791479713029_y0v0",
+      "isRead": false,
+      "createdAt": "2026-10-08T17:15:13.031Z"
+    },
+    {
+      "id": "notif_1791479727685",
+      "userId": "usr_admin_master",
+      "type": "friend_request",
+      "title": "New Friend Request",
+      "content": "StrikerPro sent you a friend request.",
+      "isRead": false,
+      "createdAt": "2026-10-08T17:15:27.685Z"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred_1791479713029_y0v0",
+      "title": "Derby Showdown: Inter vs Milan",
+      "match": "Inter Milan vs AC Milan",
+      "league": "Italian Serie A",
+      "kickoffTime": "2026-10-08T19:15:13.029Z",
+      "pick": "Over 2.5 Goals",
+      "odds": 1.75,
+      "riskRating": "Safe",
+      "confidencePercent": 86,
+      "homeTeam": "Inter Milan",
+      "awayTeam": "AC Milan",
+      "status": "Open",
+      "factors": [
+        "Derby scoring history averages 3.1 goals",
+        "Both teams rank top 2 in big chances created"
+      ],
+      "tacticalAnalysis": "Aggressive transitional attack styles make this an exceptional value selection.",
+      "authorId": "usr_admin_master",
+      "authorName": "ArenaAdmin",
+      "createdAt": "2026-10-08T17:15:13.030Z",
+      "updatedAt": "2026-10-08T17:15:13.030Z"
+    },
+    {
+      "id": "pred_premier_001",
+      "title": "EPL Super Clash: Arsenal vs Chelsea",
+      "match": "Arsenal vs Chelsea",
+      "league": "English Premier League",
+      "kickoffTime": "2026-10-08T21:06:31.040Z",
+      "pick": "Arsenal Win or Draw & Over 1.5 Goals",
+      "odds": 1.48,
+      "riskRating": "Safe",
+      "confidencePercent": 88,
+      "homeTeam": "Arsenal",
+      "awayTeam": "Chelsea",
+      "status": "Open",
+      "factors": [
+        "Arsenal unbeaten at Emirates Stadium in 12 straight league ties",
+        "Chelsea conceded in 7 of their last 8 away fixtures",
+        "Expected goals (xG) differential: +1.42 per 90m for home side",
+        "Key defensive anchors fit and starting"
+      ],
+      "tacticalAnalysis": "Statistical metrics indicate intense high-press supremacy from the home wingers. With both squads prioritizing rapid transitions, minimum 2 goals are expected alongside home dominance.",
+      "authorId": "usr_admin_master",
+      "authorName": "ArenaAdmin",
+      "createdAt": "2026-10-08T17:06:31.040Z",
+      "updatedAt": "2026-10-08T17:06:31.040Z"
+    },
+    {
+      "id": "pred_laliga_002",
+      "title": "El Clasico High-Stakes Duel",
+      "match": "Real Madrid vs Barcelona",
+      "league": "Spanish La Liga",
+      "kickoffTime": "2026-10-09T19:06:31.040Z",
+      "pick": "Both Teams To Score (BTTS - Yes)",
+      "odds": 1.57,
+      "riskRating": "Safe",
+      "confidencePercent": 84,
+      "homeTeam": "Real Madrid",
+      "awayTeam": "Barcelona",
+      "status": "Open",
+      "factors": [
+        "Past 5 consecutive head-to-head fixtures yielded Both Teams To Score",
+        "Barcelona averaging 2.3 goals scored per match in 2026",
+        "Real Madrid conversion rate in final third sits at 24.1%",
+        "Over 2.5 goals landed in 80% of recent derbies"
+      ],
+      "tacticalAnalysis": "Both heavyweights play high offside traps with aggressive fullbacks. The volume of box entries virtually guarantees opportunities at both ends of the pitch.",
+      "authorId": "usr_admin_master",
+      "authorName": "ArenaAdmin",
+      "createdAt": "2026-10-08T17:06:31.040Z",
+      "updatedAt": "2026-10-08T17:06:31.040Z"
+    },
+    {
+      "id": "pred_ucl_003",
+      "title": "Champions League Prime Banker: Man City vs Bayern Munich",
+      "match": "Manchester City vs Bayern Munich",
+      "league": "UEFA Champions League",
+      "kickoffTime": "2026-10-10T19:06:31.040Z",
+      "pick": "Over 2.5 Total Goals",
+      "odds": 1.62,
+      "riskRating": "Banker",
+      "confidencePercent": 91,
+      "homeTeam": "Manchester City",
+      "awayTeam": "Bayern Munich",
+      "status": "Open",
+      "factors": [
+        "Combined goals per 90 in Champions League: 3.85",
+        "Both forward lines rank top 3 in European big chances generated",
+        "First leg aggregate pressure demands offensive commitment"
+      ],
+      "tacticalAnalysis": "Pace on the counter combined with midfield shot creation creates the premier statistical Banker pick of the European calendar week.",
+      "authorId": "usr_admin_master",
+      "authorName": "ArenaAdmin",
+      "createdAt": "2026-10-08T17:06:31.040Z",
+      "updatedAt": "2026-10-08T17:06:31.040Z"
+    }
+  ],
+  "marketSlips": [
+    {
+      "id": "slip_1791479734219_ek17",
+      "platform": "Bet9ja",
+      "bookingCode": "B9J-12994",
+      "title": "Striker Sunday Accumulator",
+      "totalOdds": 4.25,
+      "legsCount": 3,
+      "userId": "usr_1791479662860_rfwor",
+      "username": "StrikerPro",
+      "legs": [
+        {
+          "match": "Upcoming Featured Fixture",
+          "league": "Top League",
+          "pick": "Safe Pick",
+          "odds": 1.5
+        }
+      ],
+      "notes": "High probability 4-fold with 5% Bet9ja bonus",
+      "createdAt": "2026-10-08T17:15:34.219Z"
+    },
+    {
+      "id": "slip_bet9ja_01",
+      "platform": "Bet9ja",
+      "bookingCode": "B9J-77291",
+      "title": "Weekend European Safe 4-Fold",
+      "totalOdds": 3.42,
+      "legsCount": 4,
+      "userId": "usr_admin_master",
+      "username": "ArenaAdmin",
+      "legs": [
+        {
+          "match": "Arsenal vs Chelsea",
+          "league": "EPL",
+          "pick": "1X & Over 1.5",
+          "odds": 1.48
+        },
+        {
+          "match": "Real Madrid vs Barcelona",
+          "league": "La Liga",
+          "pick": "BTTS Yes",
+          "odds": 1.57
+        },
+        {
+          "match": "Inter Milan vs AS Roma",
+          "league": "Serie A",
+          "pick": "Home Draw No Bet",
+          "odds": 1.25
+        },
+        {
+          "match": "Bayern Munich vs Dortmund",
+          "league": "Bundesliga",
+          "pick": "Over 2.5 Goals",
+          "odds": 1.35
+        }
+      ],
+      "notes": "Low volatility accumulator crafted with multi-factor probabilistic safety filters.",
+      "createdAt": "2026-10-08T17:06:31.040Z"
+    },
+    {
+      "id": "slip_sporty_02",
+      "platform": "SportyBet",
+      "bookingCode": "SPT-90241X",
+      "title": "SportyBet High-Value Treble",
+      "totalOdds": 2.89,
+      "legsCount": 3,
+      "userId": "usr_admin_master",
+      "username": "ArenaAdmin",
+      "legs": [
+        {
+          "match": "Liverpool vs Aston Villa",
+          "league": "EPL",
+          "pick": "Over 2.5 Goals",
+          "odds": 1.52
+        },
+        {
+          "match": "Atletico Madrid vs Sevilla",
+          "league": "La Liga",
+          "pick": "Home Win",
+          "odds": 1.45
+        },
+        {
+          "match": "PSG vs Marseille",
+          "league": "Ligue 1",
+          "pick": "Over 1.5 Goals",
+          "odds": 1.31
+        }
+      ],
+      "notes": "Optimized for SportyBet Flexi-Cut option.",
+      "createdAt": "2026-10-08T17:06:31.040Z"
+    },
+    {
+      "id": "slip_msport_03",
+      "platform": "MSport",
+      "bookingCode": "MSP-33810",
+      "title": "MSport Boosted Safe Slip",
+      "totalOdds": 3.15,
+      "legsCount": 3,
+      "userId": "usr_admin_master",
+      "username": "ArenaAdmin",
+      "legs": [
+        {
+          "match": "Man City vs Bayern",
+          "league": "UCL",
+          "pick": "Over 2.5",
+          "odds": 1.62
+        },
+        {
+          "match": "Leverkusen vs Leipzig",
+          "league": "Bundesliga",
+          "pick": "BTTS",
+          "odds": 1.5
+        },
+        {
+          "match": "Juventus vs Napoli",
+          "league": "Serie A",
+          "pick": "Under 3.5 Goals",
+          "odds": 1.3
+        }
+      ],
+      "notes": "Eligible for MSport Multiple Bet Bonus Boost.",
+      "createdAt": "2026-10-08T17:06:31.040Z"
+    },
+    {
+      "id": "slip_ftcom_04",
+      "platform": "Football.com",
+      "bookingCode": "FBC-88129",
+      "title": "Football.com Super Odds Banker",
+      "totalOdds": 2.45,
+      "legsCount": 2,
+      "userId": "usr_admin_master",
+      "username": "ArenaAdmin",
+      "legs": [
+        {
+          "match": "Arsenal vs Chelsea",
+          "league": "EPL",
+          "pick": "Arsenal Over 1.5 Team Goals",
+          "odds": 1.65
+        },
+        {
+          "match": "Real Madrid vs Barcelona",
+          "league": "La Liga",
+          "pick": "Over 2.5 Goals",
+          "odds": 1.48
+        }
+      ],
+      "notes": "High liquidity safe pick for Football.com users.",
+      "createdAt": "2026-10-08T17:06:31.040Z"
+    }
+  ]
+}

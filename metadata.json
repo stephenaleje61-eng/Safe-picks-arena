@@ -1,0 +1,6 @@
+{
+  "name": "SAFE PICKS ARENA",
+  "description": "Professional sports analysis, real-time live match scores, statistical predictions, worldwide chat, and bookmaker hubs with zero subscription fees.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
