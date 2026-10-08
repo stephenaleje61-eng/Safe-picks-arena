@@ -13,7 +13,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   initialMode = 'login',
   onClose,
 }) => {
-  const { login, register, verifyEmail, forgotPassword, resetPassword } = useAuth();
+  const { login, register, verifyEmail, resendVerification, forgotPassword, resetPassword } = useAuth();
   const [mode, setMode] = useState<'login' | 'register' | 'verify' | 'forgot' | 'reset'>(initialMode);
 
   // Form states
@@ -29,6 +29,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [generatedVerifyCode, setGeneratedVerifyCode] = useState<string | null>(null);
 
+  // Helper to clear error when user interacts or edits input
+  const clearErrors = () => {
+    if (errorMessage) setErrorMessage(null);
+  };
+
+  const switchMode = (newMode: 'login' | 'register' | 'verify' | 'forgot' | 'reset') => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    setMode(newMode);
+  };
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,47 +52,72 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (mode === 'login') {
         const res = await login(email, password);
         if (res.success) {
+          setErrorMessage(null);
           onClose();
         } else {
-          setErrorMessage(res.error || 'Failed to sign in');
+          setErrorMessage(res.error || 'Failed to sign in. Please verify your credentials.');
         }
       } else if (mode === 'register') {
         const res = await register(email, username, password);
         if (res.success) {
-          setGeneratedVerifyCode(res.verificationToken || null);
-          setSuccessMessage('Registration successful! Please verify your email with the verification token.');
+          setErrorMessage(null);
+          if (res.verificationToken) {
+            setGeneratedVerifyCode(res.verificationToken);
+            setVerificationToken(res.verificationToken);
+          }
+          setSuccessMessage('Registration successful! Please confirm your email verification code.');
           setMode('verify');
         } else {
-          setErrorMessage(res.error || 'Failed to create account');
+          setErrorMessage(res.error || 'Failed to create account.');
         }
       } else if (mode === 'verify') {
         const res = await verifyEmail(verificationToken, email);
         if (res.success) {
-          setSuccessMessage('Email verified successfully! Your account is now active.');
+          setErrorMessage(null);
+          setSuccessMessage('Email verified successfully! Your account is now fully active.');
           setTimeout(() => onClose(), 1500);
         } else {
-          setErrorMessage(res.error || 'Invalid verification token');
+          setErrorMessage(res.error || 'Invalid verification token. Please check the code.');
         }
       } else if (mode === 'forgot') {
         const res = await forgotPassword(email);
         if (res.success) {
+          setErrorMessage(null);
           setResetToken(res.recoveryToken || '');
           setSuccessMessage(`Password recovery initiated. Token generated: ${res.recoveryToken}`);
           setMode('reset');
         } else {
-          setErrorMessage(res.error || 'Request failed');
+          setErrorMessage(res.error || 'Request failed. Please verify your email.');
         }
       } else if (mode === 'reset') {
         const res = await resetPassword(resetToken, newPassword);
         if (res.success) {
+          setErrorMessage(null);
           setSuccessMessage('Password changed successfully! You can now log in.');
           setMode('login');
         } else {
-          setErrorMessage(res.error || 'Failed to reset password');
+          setErrorMessage(res.error || 'Failed to reset password. Please check your recovery token.');
         }
       }
     } catch (err: any) {
-      setErrorMessage(err.message || 'An unexpected error occurred');
+      setErrorMessage(err.message || 'An unexpected connection error occurred.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      const res = await resendVerification(email);
+      if (res.success && res.verificationToken) {
+        setGeneratedVerifyCode(res.verificationToken);
+        setVerificationToken(res.verificationToken);
+        setSuccessMessage('A fresh verification code has been generated and populated.');
+      } else {
+        setErrorMessage(res.error || 'Could not generate new code.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -106,38 +142,74 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </h3>
           </div>
           <button
-            onClick={onClose}
+            onClick={() => {
+              setErrorMessage(null);
+              setSuccessMessage(null);
+              onClose();
+            }}
             className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white transition"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Free Banner */}
+        {/* Free Platform Banner */}
         <div className="mt-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-xs text-emerald-300">
           <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-400" />
-          <span>Real user accounts only. 100% Free platform with zero fees.</span>
+          <span>Real user accounts only. 100% Free platform with zero VIP fees.</span>
         </div>
 
-        {/* Status Alerts */}
+        {/* Status Alerts with manual dismiss capability */}
         {errorMessage && (
-          <div className="mt-3 flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/30 p-2.5 text-xs text-rose-300">
-            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
-            <span>{errorMessage}</span>
+          <div className="mt-3 flex items-start justify-between gap-2 rounded-lg bg-rose-500/10 border border-rose-500/30 p-2.5 text-xs text-rose-300">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
+              <span>{errorMessage}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setErrorMessage(null)}
+              className="text-rose-400 hover:text-white p-0.5 rounded transition shrink-0"
+              title="Dismiss error message"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
           </div>
         )}
+
         {successMessage && (
-          <div className="mt-3 flex items-start gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-xs text-emerald-300">
-            <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-emerald-400" />
-            <span>{successMessage}</span>
+          <div className="mt-3 flex items-start justify-between gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-xs text-emerald-300">
+            <div className="flex items-start gap-2">
+              <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-emerald-400" />
+              <span>{successMessage}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSuccessMessage(null)}
+              className="text-emerald-400 hover:text-white p-0.5 rounded transition shrink-0"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
           </div>
         )}
 
         {/* Verification code helper */}
         {generatedVerifyCode && mode === 'verify' && (
           <div className="mt-3 rounded-lg bg-zinc-950 p-3 border border-zinc-800 text-xs">
-            <span className="text-zinc-400">Generated Verification Code: </span>
-            <span className="font-mono font-bold text-emerald-400 select-all">{generatedVerifyCode}</span>
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-zinc-400">Generated Verification Code:</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setVerificationToken(generatedVerifyCode);
+                  clearErrors();
+                }}
+                className="text-[10px] text-emerald-400 hover:underline font-bold"
+              >
+                Auto-fill
+              </button>
+            </div>
+            <span className="font-mono font-bold text-emerald-400 select-all block text-sm">{generatedVerifyCode}</span>
           </div>
         )}
 
@@ -155,14 +227,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   required
                   placeholder="e.g. StrikePredictor"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    clearErrors();
+                  }}
                   className="w-full rounded-xl border border-zinc-800 bg-zinc-900 pl-9 pr-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
             </div>
           )}
 
-          {/* EMAIL (Login, Register, Forgot) */}
+          {/* EMAIL (Login, Register, Forgot, Verify) */}
           {(mode === 'login' || mode === 'register' || mode === 'forgot' || mode === 'verify') && (
             <div>
               <label className="text-xs font-semibold text-zinc-300 block mb-1">Email Address</label>
@@ -173,7 +248,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   required
                   placeholder="e.g. name@domain.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    clearErrors();
+                  }}
                   className="w-full rounded-xl border border-zinc-800 bg-zinc-900 pl-9 pr-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -188,11 +266,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 {mode === 'login' && (
                   <button
                     type="button"
-                    onClick={() => {
-                      setErrorMessage(null);
-                      setSuccessMessage(null);
-                      setMode('forgot');
-                    }}
+                    onClick={() => switchMode('forgot')}
                     className="text-[11px] text-emerald-400 hover:underline"
                   >
                     Forgot Password?
@@ -206,7 +280,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   required
                   placeholder="••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    clearErrors();
+                  }}
                   className="w-full rounded-xl border border-zinc-800 bg-zinc-900 pl-9 pr-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -216,7 +293,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* VERIFY CODE (Verify mode) */}
           {mode === 'verify' && (
             <div>
-              <label className="text-xs font-semibold text-zinc-300 block mb-1">Email Verification Code</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-zinc-300">Email Verification Code</label>
+                <button
+                  type="button"
+                  onClick={handleResendCode}
+                  className="text-[11px] text-emerald-400 hover:underline"
+                >
+                  Resend code
+                </button>
+              </div>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-zinc-500" />
                 <input
@@ -224,7 +310,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   required
                   placeholder="Paste verification token..."
                   value={verificationToken}
-                  onChange={(e) => setVerificationToken(e.target.value)}
+                  onChange={(e) => {
+                    setVerificationToken(e.target.value);
+                    clearErrors();
+                  }}
                   className="w-full rounded-xl border border-zinc-800 bg-zinc-900 pl-9 pr-3 py-2 text-xs font-mono text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -240,7 +329,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="text"
                   required
                   value={resetToken}
-                  onChange={(e) => setResetToken(e.target.value)}
+                  onChange={(e) => {
+                    setResetToken(e.target.value);
+                    clearErrors();
+                  }}
                   className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs font-mono text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -251,7 +343,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   required
                   placeholder="Minimum 6 characters"
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    clearErrors();
+                  }}
                   className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -272,6 +367,38 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </button>
         </form>
 
+        {/* Quick Test Credential Helpers for testing */}
+        {mode === 'login' && (
+          <div className="mt-3 flex items-center justify-between border-t border-zinc-800/60 pt-2.5 text-[11px] text-zinc-500">
+            <span>Quick fill credentials:</span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail('admin@safepicksarena.com');
+                  setPassword('AdminArena2026!');
+                  clearErrors();
+                }}
+                className="text-emerald-400 hover:underline"
+              >
+                Admin
+              </button>
+              <span>·</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail('phscspractical@gmail.com');
+                  setPassword('AdminArena2026!');
+                  clearErrors();
+                }}
+                className="text-emerald-400 hover:underline"
+              >
+                Owner
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Footer Navigation */}
         <div className="mt-4 pt-3 border-t border-zinc-800/80 text-center text-xs text-zinc-400">
           {mode === 'login' ? (
@@ -279,11 +406,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               Don't have an account?{' '}
               <button
                 type="button"
-                onClick={() => {
-                  setErrorMessage(null);
-                  setSuccessMessage(null);
-                  setMode('register');
-                }}
+                onClick={() => switchMode('register')}
                 className="font-bold text-emerald-400 hover:underline"
               >
                 Sign Up for Free
@@ -294,11 +417,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               Already registered?{' '}
               <button
                 type="button"
-                onClick={() => {
-                  setErrorMessage(null);
-                  setSuccessMessage(null);
-                  setMode('login');
-                }}
+                onClick={() => switchMode('login')}
                 className="font-bold text-emerald-400 hover:underline"
               >
                 Sign In

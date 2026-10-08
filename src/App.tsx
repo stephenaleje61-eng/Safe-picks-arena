@@ -38,6 +38,14 @@ function ArenaApp() {
   const [predictions, setPredictions] = useState<OfficialPrediction[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [toastNotification, setToastNotification] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
+  const showToast = (text: string, type: 'success' | 'error' = 'success') => {
+    setToastNotification({ text, type });
+    setTimeout(() => {
+      setToastNotification(prev => (prev?.text === text ? null : prev));
+    }, 3500);
+  };
 
   // 1. Fetch Official Predictions
   const fetchPredictions = async () => {
@@ -223,18 +231,19 @@ function ArenaApp() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('safepicks_token')}`,
         },
         body: JSON.stringify({ targetUserId }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({ error: 'Failed to send request' }));
       if (res.ok) {
-        alert(`Friend request sent to ${username}!`);
+        showToast(`Friend request sent to ${username}!`, 'success');
       } else {
-        alert(data.error || 'Failed to send request');
+        showToast(data.error || 'Failed to send friend request', 'error');
       }
     } catch {
-      alert('Network error');
+      showToast('Network connection issue. Please try again.', 'error');
     }
   };
 
@@ -375,6 +384,20 @@ function ArenaApp() {
         onMarkAsRead={handleMarkNotificationAsRead}
         onMarkAllAsRead={handleMarkAllNotificationsAsRead}
       />
+
+      {/* Floating Toast Notification */}
+      {toastNotification && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl border border-zinc-800 bg-[#0B0F17]/95 px-4 py-3 shadow-2xl backdrop-blur-md">
+          <div className={`h-2.5 w-2.5 rounded-full ${toastNotification.type === 'success' ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'}`} />
+          <span className="text-xs font-semibold text-white">{toastNotification.text}</span>
+          <button
+            onClick={() => setToastNotification(null)}
+            className="ml-2 text-zinc-400 hover:text-white"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }

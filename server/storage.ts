@@ -252,19 +252,32 @@ class Storage {
 
   // User queries
   public getUsers(): User[] {
-    return this.data.users;
+    return Array.isArray(this.data.users) ? this.data.users : [];
   }
 
-  public findUserByEmail(email: string): User | undefined {
-    return this.data.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  public findUserByEmail(email?: string | null): User | undefined {
+    if (!email || typeof email !== 'string') return undefined;
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail) return undefined;
+    return this.getUsers().find(
+      u => u && typeof u.email === 'string' && u.email.trim().toLowerCase() === cleanEmail
+    );
   }
 
-  public findUserById(id: string): User | undefined {
-    return this.data.users.find(u => u.id === id);
+  public findUserById(id?: string | null): User | undefined {
+    if (!id || typeof id !== 'string') return undefined;
+    const cleanId = id.trim();
+    if (!cleanId) return undefined;
+    return this.getUsers().find(u => u && typeof u.id === 'string' && u.id.trim() === cleanId);
   }
 
-  public findUserByUsername(username: string): User | undefined {
-    return this.data.users.find(u => u.username.toLowerCase() === username.toLowerCase());
+  public findUserByUsername(username?: string | null): User | undefined {
+    if (!username || typeof username !== 'string') return undefined;
+    const cleanUsername = username.trim().toLowerCase();
+    if (!cleanUsername) return undefined;
+    return this.getUsers().find(
+      u => u && typeof u.username === 'string' && u.username.trim().toLowerCase() === cleanUsername
+    );
   }
 
   public createUser(user: User): User {

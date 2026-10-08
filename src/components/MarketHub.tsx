@@ -43,10 +43,13 @@ export const MarketHub: React.FC = () => {
     setTimeout(() => setCopiedCode(null), 2500);
   };
 
+  const [modalError, setModalError] = useState<string | null>(null);
+
   const handleShareSlip = async (e: React.FormEvent) => {
     e.preventDefault();
+    setModalError(null);
     if (!user) {
-      alert('Please sign in to share a booking slip.');
+      setModalError('Please sign in to share a booking slip.');
       return;
     }
 
@@ -55,6 +58,7 @@ export const MarketHub: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('safepicks_token')}`,
         },
         body: JSON.stringify({
@@ -71,13 +75,14 @@ export const MarketHub: React.FC = () => {
         setFormCode('');
         setFormTitle('');
         setFormNotes('');
+        setModalError(null);
         fetchSlips();
       } else {
-        const err = await res.json();
-        alert(err.error || 'Failed to submit slip');
+        const err = await res.json().catch(() => ({ error: 'Failed to submit slip' }));
+        setModalError(err.error || 'Failed to submit slip');
       }
     } catch (err: any) {
-      alert(err.message || 'Network error');
+      setModalError(err.message || 'Network error');
     }
   };
 
@@ -416,6 +421,12 @@ export const MarketHub: React.FC = () => {
             <p className="mt-1 text-xs text-zinc-400">
               Contribute a verified slip for Bet9ja, SportyBet, MSport, or Football.com.
             </p>
+
+            {modalError && (
+              <div className="mt-3 rounded-lg bg-rose-500/10 border border-rose-500/30 p-2 text-xs text-rose-300">
+                {modalError}
+              </div>
+            )}
 
             <form onSubmit={handleShareSlip} className="mt-4 space-y-3">
               <div>

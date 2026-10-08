@@ -20,6 +20,14 @@ const isProduction = process.env.NODE_ENV === 'production';
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
+// Catch any malformed JSON payload from client
+app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
+  if (err instanceof SyntaxError && 'body' in err) {
+    return res.status(400).json({ error: 'Malformed JSON payload provided.' });
+  }
+  next(err);
+});
+
 // High-throughput Token-Bucket / Sliding Window Rate Limiting (Supports millions of safe requests)
 const requestCounts = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
@@ -116,6 +124,21 @@ app.use('/api/notifications', notificationsRouter);
 app.use('/api/predictions', predictionsRouter);
 app.use('/api/market', marketRouter);
 app.use('/api/football', footballRouter);
+
+// Strict 404 handler for API routes (guarantees JSON instead of falling through to Vite HTML)
+app.all('/api/*', (req: Request, res: Response) => {
+  res.status(404).json({ error: `API endpoint '${req.method} ${req.path}' not found` });
+});
+
+// Global API error handler (guarantees valid JSON response on any server exception)
+app.use('/api', (err: any, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('API Error intercepted:', err);
+  const status = typeof err?.status === 'number' && err.status >= 400 && err.status < 600 ? err.status : 500;
+  res.status(status).json({
+    error: err?.message || 'Internal server error occurred',
+    code: err?.code || 'SERVER_ERROR',
+  });
+});
 
 // Frontend Vite Integration (Dev) or Static files (Prod)
 async function startServer() {

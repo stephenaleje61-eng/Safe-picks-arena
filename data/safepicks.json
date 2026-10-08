@@ -29,6 +29,16 @@
       "isVerified": true,
       "bio": "Sports enthusiast & tactical predictor",
       "createdAt": "2026-10-08T17:14:22.860Z"
+    },
+    {
+      "id": "usr_1791483774584_5x2ta",
+      "email": "predictor99@safepicksarena.com",
+      "username": "Predictor99",
+      "passwordHash": "$2b$10$mHnpeuIqXMkEU.WX8RMzB.XQ1vc3ooMd9V1018mL/DHOMkLJupaLO",
+      "role": "admin",
+      "isVerified": true,
+      "bio": "Sports enthusiast & tactical predictor",
+      "createdAt": "2026-10-08T18:22:54.584Z"
     }
   ],
   "sessions": [
@@ -41,6 +51,31 @@
       "token": "fcbc18cb3b1c2ef3ee046e5d482fc1e5dc3232cb7376457a3f5950c82443a3e7",
       "userId": "usr_admin_master",
       "createdAt": 1791479685610
+    },
+    {
+      "token": "89117deb1d94f76332cee01bf970872bc031a184a982c3220b3010eb0a159da0",
+      "userId": "usr_owner_main",
+      "createdAt": 1791483310765
+    },
+    {
+      "token": "6fc22aa8f6e1ad682e0278567e4cb5ee8e7c9702ed4cd1ded01215fc8aff2078",
+      "userId": "usr_owner_main",
+      "createdAt": 1791483756562
+    },
+    {
+      "token": "8572aef989baa0b2dc325f0a2ba5e0aceee7c0e574ebbe87553c2ab9db88364f",
+      "userId": "usr_1791483774584_5x2ta",
+      "createdAt": 1791483774585
+    },
+    {
+      "token": "0a8cd3d7a0f9a20fdb43d22a021918869476e9557d6c76eb120d9a39d462b290",
+      "userId": "usr_1791483774584_5x2ta",
+      "createdAt": 1791483782870
+    },
+    {
+      "token": "792e73c2fda02c95296ee2077bb31b8af06fedd11daae4981f821ec0ee96a3f2",
+      "userId": "usr_1791483774584_5x2ta",
+      "createdAt": 1791483799246
     }
   ],
   "chatMessages": [
@@ -100,6 +135,15 @@
       "content": "StrikerPro sent you a friend request.",
       "isRead": false,
       "createdAt": "2026-10-08T17:15:27.685Z"
+    },
+    {
+      "id": "notif_1791483774585",
+      "userId": "usr_1791483774584_5x2ta",
+      "type": "system",
+      "title": "Welcome to SAFE PICKS ARENA!",
+      "content": "Verification token generated: 66d19994223fd8ee3d7a24c53ded32570f0fe175. Click Verify Email in your profile to complete account verification.",
+      "isRead": false,
+      "createdAt": "2026-10-08T18:22:54.585Z"
     }
   ],
   "predictions": [

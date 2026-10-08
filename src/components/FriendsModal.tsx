@@ -20,6 +20,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose }) =
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const fetchFriendData = async () => {
     try {
@@ -71,16 +72,19 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose }) =
         },
         body: JSON.stringify({ targetUserId }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({ error: 'Failed to send request' }));
       if (res.ok) {
+        setActionError(null);
         setActionSuccess('Friend request sent!');
         fetchFriendData();
         setTimeout(() => setActionSuccess(null), 3000);
       } else {
-        alert(data.error || 'Failed to send friend request');
+        setActionError(data.error || 'Failed to send friend request');
+        setTimeout(() => setActionError(null), 4000);
       }
     } catch {
-      alert('Network error');
+      setActionError('Network connection issue. Please try again.');
+      setTimeout(() => setActionError(null), 4000);
     }
   };
 
@@ -205,6 +209,12 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose }) =
           <div className="mt-3 flex items-center gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-2 text-xs text-emerald-400">
             <Check className="h-4 w-4" />
             <span>{actionSuccess}</span>
+          </div>
+        )}
+
+        {actionError && (
+          <div className="mt-3 flex items-center gap-2 rounded-lg bg-rose-500/10 border border-rose-500/30 p-2 text-xs text-rose-300">
+            <span>{actionError}</span>
           </div>
         )}
 
